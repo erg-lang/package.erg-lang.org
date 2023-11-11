@@ -19,10 +19,11 @@ body {
 header {
     background-color: #24292e;
     color: #fff;
-    padding: 1rem;
+    padding: 0rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: 'Saira', sans-serif;
 }
 
 header h1 {
@@ -88,6 +89,10 @@ main li span {
     color: #6a737d;
 }
 
+h1, h2, a.button {
+    font-family: 'Saira', sans-serif;
+}
+
 /* Footer styles */
 footer {
     background-color: #f6f8fa;
@@ -98,4 +103,18 @@ footer {
 footer p {
     font-size: 0.8rem;
     color: #6a737d;
+}
+
+.media-icon {
+    vertical-align: sub;
+}
+
+.head {
+    margin-top: 0px;
+}
+
+.hello {
+    align-items: center;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
 }
