@@ -109,12 +109,17 @@ footer p {
     vertical-align: sub;
 }
 
-.head {
-    margin-top: 0px;
-}
-
 .hello {
     align-items: center;
     padding-top: 2rem;
     padding-bottom: 4rem;
+}
+
+a.navbar-brand, a.navbar-item, a.navbar-link {
+    color: #fff;
+}
+
+a.navbar-item:hover, a.navbar-link:hover {
+    color: #bbb;
+    background-color: #24292e;
 }
