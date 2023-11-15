@@ -89,7 +89,7 @@ main li span {
     color: #6a737d;
 }
 
-h1, h2, a.button {
+h1, h2, a.button, button.button, aside ul a {
     font-family: 'Saira', sans-serif;
 }
 
@@ -122,4 +122,17 @@ a.navbar-brand, a.navbar-item, a.navbar-link {
 a.navbar-item:hover, a.navbar-link:hover {
     color: #bbb;
     background-color: #24292e;
+}
+
+input.language-bash {
+    font-family: 'Saira', sans-serif;
+}
+
+p.menu-label {
+    font-weight: bolder;
+    font-size: medium;
+}
+
+.no-readme {
+    font-size: larger;
 }
