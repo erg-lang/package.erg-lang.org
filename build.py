@@ -24,6 +24,8 @@ class License(str):
                 return "https://opensource.org/licenses/GPL-3.0"
             case "AGPL-3.0":
                 return "https://opensource.org/licenses/AGPL-3.0"
+            case "CC0":
+                return "https://creativecommons.org/publicdomain/zero/1.0/"
             case _:
                 return ""
 
@@ -48,8 +50,7 @@ class Package:
     def __repr__(self):
         return f'Package({self.name}, {self.version}, "{self.description}", {self.tags}, {self.license}, {self.repository})'
 
-featured = []
-new = []
+pkgs = []
 
 owner = 'erg-lang'
 repo = 'package-index'
@@ -85,23 +86,31 @@ if response.status_code == 200:
                         pkg_module.license,
                         pkg_module.__dict__.get('repository'),
                     )
-                    featured.append(pkg)
-                    new.append(pkg)
+                    pkgs.append(pkg)
 else:
     print(f"Failed to fetch directory structure. Status code: {response.status_code}")
+
+featured = pkgs[:5]
+new = pkgs[:5]
 
 if not os.path.exists('docs'):
     os.makedirs('docs')
     shutil.copyfile('style.css', 'docs/style.css')
     shutil.copyfile('script.js', 'docs/script.js')
+    shutil.copyfile('package-policy.html', 'docs/package-policy.html')
+    shutil.copyfile('privacy-policy.html', 'docs/privacy-policy.html')
+    shutil.copyfile('security.html', 'docs/security.html')
+
 env = jinja2.Environment(loader=jinja2.FileSystemLoader('.'))
 template = env.get_template("template.html")
 template.stream(featured=featured, new=new).dump("docs/index.html")
+template = env.get_template("template_all.html")
+template.stream(pkgs=pkgs).dump("docs/all.html")
 
-for pkg in new:
+for pkg in pkgs:
     if not os.path.exists(f'docs/{pkg.namespace}'):
         os.makedirs(f'docs/{pkg.namespace}')
         # shutil.copyfile('style.css', f'docs/{pkg.namespace}/style.css')
         # shutil.copyfile('script.js', f'docs/{pkg.namespace}/script.js')
-    template = env.get_template("package_template.html")
+    template = env.get_template("template_package.html")
     template.stream(pkg=pkg).dump(f"docs/{pkg.namespace}/{pkg.name}.html")
