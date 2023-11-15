@@ -56,9 +56,10 @@
         <h2>Featured Packages</h2>
         <ul>
             {% for package in featured %}
+            {% set full_name = package.namespace + "/" + package.name %}
             <li>
                 <div>
-                    <a href="#">{{ package.name }}</a>
+                    <a href="{{ full_name }}.html">{{ full_name }}</a>
                     <small>{{ package.version }}</small>
                 </div>
                 <span>{{ package.description }}</span>
@@ -68,9 +69,10 @@
         <h2>New Packages</h2>
         <ul>
             {% for package in new %}
+            {% set full_name = package.namespace + "/" + package.name %}
             <li>
                 <div>
-                    <a href="#">{{ package.name }}</a>
+                    <a href="{{ full_name }}.html">{{ full_name }}</a>
                     <small>{{ package.version }}</small>
                 </div>
                 <span>{{ package.description }}</span>
