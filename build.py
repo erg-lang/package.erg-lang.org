@@ -10,9 +10,9 @@ class License(str):
     def url(self):
         match self:
             # TODO: multiple licenses
-            case "MIT" | "MIT OR Apache-2.0" | "Apache-2.0 OR MIT":
+            case "MIT" | "MIT OR Apache-2.0" | "MIT or Apache-2.0":
                 return "https://opensource.org/licenses/MIT"
-            case "Apache-2.0":
+            case "Apache-2.0" | "Apache-2.0 OR MIT" | "Apache-2.0 or MIT":
                 return "https://opensource.org/licenses/Apache-2.0"
             case "BSD-3-Clause":
                 return "https://opensource.org/licenses/BSD-3-Clause"
@@ -24,7 +24,7 @@ class License(str):
                 return "https://opensource.org/licenses/GPL-3.0"
             case "AGPL-3.0":
                 return "https://opensource.org/licenses/AGPL-3.0"
-            case "CC0":
+            case "CC0" | "CC0-1.0":
                 return "https://creativecommons.org/publicdomain/zero/1.0/"
             case _:
                 return ""
@@ -95,11 +95,12 @@ new = pkgs[:5]
 
 if not os.path.exists('docs'):
     os.makedirs('docs')
-    shutil.copyfile('style.css', 'docs/style.css')
-    shutil.copyfile('script.js', 'docs/script.js')
-    shutil.copyfile('package-policy.html', 'docs/package-policy.html')
-    shutil.copyfile('privacy-policy.html', 'docs/privacy-policy.html')
-    shutil.copyfile('security.html', 'docs/security.html')
+shutil.copyfile('style.css', 'docs/style.css')
+shutil.copyfile('script.js', 'docs/script.js')
+shutil.copyfile('search.js', 'docs/search.js')
+shutil.copyfile('package-policy.html', 'docs/package-policy.html')
+shutil.copyfile('privacy-policy.html', 'docs/privacy-policy.html')
+shutil.copyfile('security.html', 'docs/security.html')
 
 env = jinja2.Environment(loader=jinja2.FileSystemLoader('.'))
 template = env.get_template("template.html")

@@ -47,10 +47,10 @@
         </section>
         <div class="field has-addons">
             <div class="control is-expanded">
-                <input class="input is-medium" type="text" placeholder="Search packages">
+                <input id="search" class="input is-medium" type="text" placeholder="Search packages">
             </div>
             <div class="control">
-                <a class="button is-medium is-dark">Search</a>
+                <a class="button is-medium is-dark" href="all.html?search=" onclick="event.preventDefault(); window.location.href='all.html?search=' + document.getElementById('search').value;">Search</a>
             </div>
         </div>
         <h2>Featured Packages</h2>

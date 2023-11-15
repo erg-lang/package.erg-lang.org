@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Saira:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+    <script src="search.js" defer></script>
 </head>
 
 <body>
@@ -33,27 +35,37 @@
         </a>
         <nav class="navbar-menu">
             <nav class="navbar-end">
-                <a class="navbar-item" href="#">Browse all packages</a>
+                <a class="navbar-item" href="all.html">Browse all packages</a>
                 <a class="navbar-item">Documentation</a>
                 <a class="navbar-item">Report an issue</a>
             </nav>
         </nav>
     </header>
     <main>
-        <h1 class="title">All Packages</h1>
-        <h2 class="subtitle">found {{ pkgs|length }} packages</h2>
-        <ul>
-            {% for package in pkgs %}
-            {% set full_name = package.namespace + "/" + package.name %}
-            <li>
-                <div>
-                    <a href="{{ full_name }}.html">{{ full_name }}</a>
-                    <small>{{ package.version }}</small>
-                </div>
-                <span>{{ package.description }}</span>
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="field has-addons">
+            <div class="control is-expanded">
+                <input id="search-input" class="fuzzy-search input is-medium" type="text" placeholder="Search packages">
+            </div>
+            <div class="control">
+                <button class="button is-medium is-dark" onclick="search();">Search</a>
+            </div>
+        </div>
+        <h1 id="page-title" class="title">All Packages</h1>
+        <h2 id="result-counter" class="subtitle">found {{ pkgs|length }} packages</h2>
+        <div id="package-list">
+            <ul class="list">
+                {% for package in pkgs %}
+                {% set full_name = package.namespace + "/" + package.name %}
+                <li>
+                    <div>
+                        <a class="package-name" href="{{ full_name }}.html">{{ full_name }}</a>
+                        <small>{{ package.version }}</small>
+                    </div>
+                    <span class="package-description">{{ package.description }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </main>
     <footer class="footer">
         <div class="container">
