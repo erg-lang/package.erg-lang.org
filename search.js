@@ -1,3 +1,10 @@
+window.document.onkeydown = function (event) {
+    if (event.key == "Enter" && document.activeElement.id == "search-input") {
+        event.preventDefault();
+        search();
+    }
+};
+
 function getParam(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -23,7 +30,7 @@ let packageList = new List("package-list", options);
 function search() {
     let page_title = document.getElementById("page-title");
     if (input.value != "") {
-        page_title.innerHTML = `Search Result for "${input.value}"`;
+        page_title.innerHTML = `Search Results for "${input.value}"`;
     } else {
         page_title.innerHTML = "All Packages";
     }
