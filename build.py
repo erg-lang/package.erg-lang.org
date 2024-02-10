@@ -54,15 +54,33 @@ pkgs = []
 
 owner = 'erg-lang'
 repo = 'package-index'
-path = ''
 token = os.getenv('ERG_GITHUB_TOKEN')
-devs_url = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}/developers'
+devs_url = f'https://api.github.com/repos/{owner}/{repo}/contents/developers'
+cert_url = f'https://api.github.com/repos/{owner}/{repo}/contents/certified'
 headers = {
     'Accept': 'application/vnd.github.v3+json',
     'Authorization': f'Bearer {token}',
 }
-response = requests.get(devs_url, headers=headers)
 
+def add_package(namespace, url, pkg):
+    if pkg['type'] == 'dir':
+        package_er = f'{url}/{pkg["name"]}/package.er'
+        resp = requests.get(package_er, headers=headers)
+        pkg_data = resp.json()
+        decoded_content = base64.b64decode(pkg_data['content']).decode('utf-8')
+        pkg_module = erg_compiler.exec(decoded_content)
+        pkg = Package(
+            namespace,
+            pkg_module.name,
+            pkg_module.version,
+            pkg_module.__dict__.get('description', ''),
+            pkg_module.__dict__.get('tags', []),
+            pkg_module.license,
+            pkg_module.__dict__.get('repository'),
+        )
+        pkgs.append(pkg)
+
+response = requests.get(devs_url, headers=headers)
 if response.status_code == 200:
     developers = response.json()
     for developer in developers:
@@ -71,22 +89,16 @@ if response.status_code == 200:
             dev_url = f'{devs_url}/{dev}'
             resp = requests.get(dev_url, headers=headers)
             for pkg in resp.json():
-                if pkg['type'] == 'dir':
-                    package_er = f'{dev_url}/{pkg["name"]}/package.er'
-                    resp = requests.get(package_er, headers=headers)
-                    pkg_data = resp.json()
-                    decoded_content = base64.b64decode(pkg_data['content']).decode('utf-8')
-                    pkg_module = erg_compiler.exec_module(decoded_content)
-                    pkg = Package(
-                        dev,
-                        pkg_module.name,
-                        pkg_module.version,
-                        pkg_module.__dict__.get('description', ''),
-                        pkg_module.__dict__.get('tags', []),
-                        pkg_module.license,
-                        pkg_module.__dict__.get('repository'),
-                    )
-                    pkgs.append(pkg)
+                add_package(dev, dev_url, pkg)
+else:
+    print(f"Failed to fetch directory structure. Status code: {response.status_code}")
+
+response = requests.get(cert_url, headers=headers)
+if response.status_code == 200:
+    certified = response.json()
+    for pkg in certified:
+        print("pkg:", pkg)
+        # add_package(cert_url, pkg)
 else:
     print(f"Failed to fetch directory structure. Status code: {response.status_code}")
 
