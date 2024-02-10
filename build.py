@@ -54,12 +54,10 @@ pkgs = []
 
 owner = 'erg-lang'
 repo = 'package-index'
-token = os.getenv('ERG_GITHUB_TOKEN')
 devs_url = f'https://api.github.com/repos/{owner}/{repo}/contents/developers'
 cert_url = f'https://api.github.com/repos/{owner}/{repo}/contents/certified'
 headers = {
     'Accept': 'application/vnd.github.v3+json',
-    'Authorization': f'Bearer {token}',
 }
 
 def add_package(namespace, url, pkg):
