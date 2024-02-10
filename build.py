@@ -33,22 +33,24 @@ class Package:
     namespace: str
     name: str
     version: str
+    type: str
     description: str | None
     tags: list[str]
     license: License
     repository: str | None
 
-    def __init__(self, namespace, name, version, description, tags, license, repository):
+    def __init__(self, namespace, name, version, type, description, tags, license, repository):
         self.namespace = namespace
         self.name = name
         self.version = version
+        self.type = type
         self.description = description
         self.tags = tags
         self.license = License(license)
         self.repository = repository
 
     def __repr__(self):
-        return f'Package({self.name}, {self.version}, "{self.description}", {self.tags}, {self.license}, {self.repository})'
+        return f'Package({self.name}, {self.version}, {self.type} "{self.description}", {self.tags}, {self.license}, {self.repository})'
 
 owner = 'erg-lang'
 repo = 'package-index'
@@ -70,6 +72,7 @@ def add_package(namespace, url, pkg):
             namespace,
             pkg_module.name,
             pkg_module.version,
+            pkg_module.__dict__.get('type', 'app'),
             pkg_module.__dict__.get('description', ''),
             pkg_module.__dict__.get('tags', []),
             pkg_module.license,
