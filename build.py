@@ -50,8 +50,6 @@ class Package:
     def __repr__(self):
         return f'Package({self.name}, {self.version}, "{self.description}", {self.tags}, {self.license}, {self.repository})'
 
-pkgs = []
-
 owner = 'erg-lang'
 repo = 'package-index'
 devs_url = f'https://api.github.com/repos/{owner}/{repo}/contents/developers'
@@ -60,6 +58,7 @@ headers = {
     'Accept': 'application/vnd.github.v3+json',
 }
 
+pkgs = []
 def add_package(namespace, url, pkg):
     if pkg['type'] == 'dir':
         package_er = f'{url}/{pkg["name"]}/package.er'
@@ -95,8 +94,7 @@ response = requests.get(cert_url, headers=headers)
 if response.status_code == 200:
     certified = response.json()
     for pkg in certified:
-        print("pkg:", pkg)
-        # add_package(cert_url, pkg)
+        add_package("certified", cert_url, pkg)
 else:
     print(f"Failed to fetch directory structure. Status code: {response.status_code}")
 

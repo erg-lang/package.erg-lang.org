@@ -56,9 +56,14 @@
             <ul class="list">
                 {% for package in pkgs %}
                 {% set full_name = package.namespace + "/" + package.name %}
+                {% if package.namespace == "certified" %}
+                    {% set short_name = package.name %}
+                {% else %}
+                    {% set short_name = package.namespace + "/" + package.name %}
+                {% endif %}
                 <li>
                     <div>
-                        <a class="package-name" href="{{ full_name }}.html">{{ full_name }}</a>
+                        <a class="package-name" href="{{ full_name }}.html">{{ short_name }}</a>
                         <small>{{ package.version }}</small>
                     </div>
                     <span class="package-description">{{ package.description }}</span>
