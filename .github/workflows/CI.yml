@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [notification-push-main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  ERG_GITHUB_TOKEN: ${{ secrets.ERG_GITHUB_TOKEN }}
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v4
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install jinja2
+          pip3 install maturin
+      - name: Install erg_compiler
+        run: |
+          git clone https://github.com/erg-lang/erg
+          cd erg
+          git checkout v0.6.26
+          maturin build -i python --features pylib_compiler --manifest-path crates/erg_compiler/Cargo.toml
+          wheel=$(ls target/wheels/erg_compiler*.whl)
+          pip3 install $wheel
+      - name: Build
+        run: |
+          python3 build.py
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: docs
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
